@@ -1,0 +1,3 @@
+useDynLib(ramses, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")
