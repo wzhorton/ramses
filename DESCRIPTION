@@ -1,11 +1,13 @@
 Package: ramses
 Type: Package
 Title: R Auxiliary Mcmc Suite for Easy Sampling
-Version: 1.0
+Version: 0.0.0.9000
 Date: 2018-07-30
 Author: Zach Horton
 Maintainer: Same <example@email.com>
-Description: Ramses is a heirarchical modeling tool suite designed to make programming Bayesian models easier and faster. It does so by automating many book keeping elements and providing functions that deal with common modeling cases.
+Description: Ramses is a heirarchical modeling tool suite designed to make 
+  programming Bayesian models easier and faster. It does so by automating many 
+  book-keeping elements and providing functions that deal with common modeling cases.
 License: GPL-3 
 Imports: Rcpp (>= 0.12.18), fields (>= 9.6)
 LinkingTo: Rcpp, RcppArmadillo

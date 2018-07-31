@@ -2,9 +2,7 @@
 % Please edit documentation in R/update_functions_ramses.R
 \name{update_gaussian_process}
 \alias{update_gaussian_process}
-\title{Gaussian Process Update
-func ~ GP(mu(x),cov(d=|x1-x2|))
-Updates and returns the mean vector for a gaussian process given evaluation points, observed data, a mean function, and a covariance function.}
+\title{Gaussian Process Update}
 \usage{
 update_gaussian_process(x, y, time, mnfun, covfun)
 }
@@ -13,15 +11,19 @@ update_gaussian_process(x, y, time, mnfun, covfun)
 
 \item{time}{locations to evaluate the curve at.}
 
-\item{mnfun}{mean function that takes a single argument. If using a constant (like 0) use function(z){0}.}
+\item{mnfun}{mean function that takes a single argument. 
+If using a constant like 0 use function(z)\{0\}.}
 
-\item{covfun}{covariance function that takes a single argument that represents an absolute distance, which is often calculated using fields::rdist.}
+\item{covfun}{covariance function that takes a single argument that represents 
+an absolute distance. Distances are internally calculated using fields::rdist.}
 }
 \value{
-a vector corresponding to the time variable that represents the updated mean vector.
+a vector corresponding to the time variable that represents the updated
+  mean vector.
 }
 \description{
-Gaussian Process Update
-func ~ GP(mu(x),cov(d=|x1-x2|))
-Updates and returns the mean vector for a gaussian process given evaluation points, observed data, a mean function, and a covariance function.
+Updates and returns the mean vector for a gaussian process given evaluation points, 
+observed data, a mean function, and a covariance function.\cr \cr
+Argument model:\cr
+y(time) ~ GP(mnfun(x),covfun(x1-x2))
 }

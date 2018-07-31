@@ -16,8 +16,11 @@ sampler(inits, fixed, updates, niter, nburn)
 \item{niter, nburn}{number of MCMC iterates and burnin.}
 }
 \value{
-A matrix where each row is an MCMC iterate and each column is a parameter or part of a parameter vector.
+A matrix where each row is an MCMC iterate and each column is a 
+  parameter or part of a parameter vector.
 }
 \description{
-Function that fits a heirarchical model using MCMC. It requires a list of initial parameter values, a list of needed fixed values, and a list of update functions, all of which are tied together by matching element names.
+Function that fits a heirarchical model using MCMC. It requires a list of initial 
+parameter values, a list of needed fixed values, and a list of update functions, 
+all of which are tied together by matching element names.
 }

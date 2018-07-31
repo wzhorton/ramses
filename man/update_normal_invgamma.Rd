@@ -20,7 +20,9 @@ update_normal_invgamma(y, a, b, mu, R, R_inv)
 \item{R_inv}{scaled precision matrix, alternative specification to R.}
 }
 \description{
-Generates a value from the posterior distribution in the case where there is a multivariate normal likelihood and an inverse gamma prior.  
-y ~ Nn(mu, sig2*R)
-sig2 ~ IG(a,b)
+Generates a value from the posterior distribution in the case where there 
+is a multivariate normal likelihood and an inverse gamma prior.\cr \cr
+Argument model:\cr
+y ~ Nn(mu, sig2*R)\cr
+sig2 ~ IG(a,b)\cr
 }

@@ -8,9 +8,11 @@ update_metropolis(pname, loglik_func, logprior_func, parm_state, fixed,
   tune = 0.01, lower = NULL, upper = NULL)
 }
 \arguments{
-\item{pname}{character string naming the parameter. The name must match something in the parm_state list.}
+\item{pname}{character string naming the parameter. The name must match something
+in the parm_state list.}
 
-\item{loglik_func, logprior_func}{log likelihood/prior function that takes the parm_state and fixed lists as arguments.}
+\item{loglik_func, logprior_func}{log likelihood/prior function that takes the
+parm_state and fixed lists as arguments.}
 
 \item{parm_state}{list that names parameters and contains current values.}
 
@@ -18,8 +20,12 @@ update_metropolis(pname, loglik_func, logprior_func, parm_state, fixed,
 
 \item{tune}{tuning parameter (standard deviation) in the normal proposal distribution.}
 
-\item{lower, upper}{bounds for the parameter to restrict proposed values. Invalid values are reflected back into the domain. If both bounds are provided, make sure the tune is small so that reflections won't also be invalid.}
+\item{lower, upper}{bounds for the parameter to restrict proposed values. Invalid
+values are reflected back into the domain. If both bounds are provided, make
+sure the tune is small so that reflections won't also be invalid.}
 }
 \description{
-Function that performs a M-H update for a named parameter given the RAMSES structural elements and loglikelihood/logprior functions. Candidate values are drawn from a normal distribution, but it does allow for upper and lower bounds.
+Function that performs a M-H update for a named parameter given the RAMSES 
+structural elements and loglikelihood/logprior functions. Candidate values 
+are drawn from a normal distribution, but it does allow for upper and lower bounds.
 }

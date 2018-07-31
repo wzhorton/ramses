@@ -13,11 +13,15 @@ update_step(parm_state, fixed, updates, parm_names = names(updates))
 
 \item{updates}{list of update functions with names matching those in parm_state.}
 
-\item{parm_names}{vector naming the parameters as the appear in order in both updates and parm_state.}
+\item{parm_names}{vector naming the parameters as the appear in order in both 
+updates and parm_state.}
 }
 \value{
-A list in the form of parm_state, but with updated values. To be used within the RAMSES sampler function.
+A list in the form of parm_state, but with updated values. To be used 
+  within the RAMSES sampler function.
 }
 \description{
-Excecutes one full cycle of an MCMC iteration within the RAMSES sampling structure, updating each parameter in the parm_state list with the update function found in the updates list.
+Excecutes one full cycle of an MCMC iteration within the RAMSES sampling 
+structure, updating each parameter in the parm_state list with the update 
+function found in the updates list.
 }

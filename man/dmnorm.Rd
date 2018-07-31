@@ -18,5 +18,6 @@ dmnorm(y, mu, cov, prec, log = FALSE)
 \item{log}{logical; if TRUE, density calculations are computed on the log scale.}
 }
 \description{
-Computes the (log) density of the multivariate normal distribution using either the covariance or precision parametrization.
+Computes the (log) density of the multivariate normal distribution 
+using either the covariance or precision parametrization.
 }
