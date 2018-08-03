@@ -8,7 +8,7 @@ Maintainer: Same <example@email.com>
 Description: RAMSES is a heirarchical modeling tool suite designed to make 
   programming Bayesian models easier and faster. It does so by automating many 
   book-keeping elements and providing functions that deal with common modeling cases.
-  RAMSES also provides many utility functions relating to functional analysis.
+  RAMSES also provides utility functions relating to functional analysis.
 License: GPL-3 
 Imports: Rcpp (>= 0.12.18), fields (>= 9.6), splines (>= 3.3.0), Matrix (>= 1.2-13)
 LinkingTo: Rcpp, RcppArmadillo
