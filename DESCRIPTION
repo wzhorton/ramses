@@ -1,7 +1,7 @@
 Package: ramses
 Type: Package
 Title: R Auxiliary Mcmc Suite for Easy Sampling
-Version: 0.0.2
+Version: 0.0.3
 Date: 2018-07-30
 Author: Zach Horton
 Maintainer: Same <example@email.com>
@@ -10,6 +10,7 @@ Description: RAMSES is a heirarchical modeling tool suite designed to make
   book-keeping elements and providing functions that deal with common modeling cases.
   RAMSES also provides utility functions relating to functional analysis.
 License: GPL-3 
-Imports: Rcpp (>= 0.12.18), fields (>= 9.6), splines (>= 3.3.0), Matrix (>= 1.2-13)
+Depends: R (>= 3.4.0)
+Imports: Rcpp (>= 0.12.18), fields (>= 9.6), Matrix (>= 1.2-13)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 6.1.0

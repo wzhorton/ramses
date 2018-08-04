@@ -14,8 +14,6 @@
 
 acc_rate <- function(chain){
   n <- length(chain)
-  lag1chain <- chain[-1]
-  chain <- chain[-n]
-  accepts <- sapply(1:(n-1), function(i) lag1chain[i] != chain[i])
+  accepts <- sapply(1:(n-1), function(i) chain[i] != chain[i+1])
   return(mean(accepts))
 }
