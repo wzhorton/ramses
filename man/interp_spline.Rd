@@ -12,8 +12,8 @@ interp_spline(x, y, nout = length(y))
 \item{nout}{number of points to interpolate out}
 }
 \description{
-Interpolates out equally spaced values by fitting a cubic spline on given points and 
-matching the endpoints. Often used to redefine a curve with warped time axis on an 
-even time basis. Note that quality of interpolation decreases with inadequate density 
+Interpolates out equally spaced values by fitting a cubic spline on given points and
+matching the endpoints. Often used to redefine a curve with warped time axis on an
+even time basis. Note that quality of interpolation decreases with inadequate density
 of defining points.
 }

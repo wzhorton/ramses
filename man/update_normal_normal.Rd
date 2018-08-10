@@ -18,7 +18,7 @@ update_normal_normal(y, X, mu, Sig, V, Sig_inv, V_inv)
 \item{V, V_inv}{prior covariance/precision matrix.}
 }
 \description{
-Generates a value from the posterior distribution in the case where 
+Generates a value from the posterior distribution in the case where
 there is a multivariate normal likelihood and a multivariate normal prior.\cr \cr
 Argument Model:\cr
 y ~ Nn(X*beta, Sig)\cr

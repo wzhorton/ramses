@@ -16,6 +16,6 @@ dinvgamma(x, shape, rate, scale = 1/rate, log = FALSE)
 \item{log}{logical; if TRUE, density calculations are computed on the log scale.}
 }
 \description{
-Computes the (log) density of the inverse gamma distribution using 
+Computes the (log) density of the inverse gamma distribution using
 either the scale or rate parametrization.
 }

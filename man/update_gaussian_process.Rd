@@ -11,10 +11,10 @@ update_gaussian_process(x, y, time, mnfun, covfun)
 
 \item{time}{locations to evaluate the curve at.}
 
-\item{mnfun}{mean function that takes a single argument. 
+\item{mnfun}{mean function that takes a single argument.
 If using a constant like 0 use function(z)\{0\}.}
 
-\item{covfun}{covariance function that takes a single argument that represents 
+\item{covfun}{covariance function that takes a single argument that represents
 an absolute distance. Distances are internally calculated using fields::rdist.}
 }
 \value{
@@ -22,7 +22,7 @@ a vector corresponding to the time variable that represents the updated
   mean vector.
 }
 \description{
-Updates and returns the mean vector for a gaussian process given evaluation points, 
+Updates and returns the mean vector for a gaussian process given evaluation points,
 observed data, a mean function, and a covariance function.\cr \cr
 Argument model:\cr
 y(time) ~ GP(mnfun(x),covfun(x1-x2))

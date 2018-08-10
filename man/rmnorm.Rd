@@ -17,7 +17,7 @@ rmnorm(mu, cov, prec)
 A randomly generated vector with the same length as mu.
 }
 \description{
-Generates a normally distributed vector given a mean vector and 
-either a covariance matrix or a precision matrix. Does not support 
+Generates a normally distributed vector given a mean vector and
+either a covariance matrix or a precision matrix. Does not support
 generating multiple vectors at once.
 }

@@ -10,6 +10,6 @@ K2(dim)
 \item{dim}{dimension of output matrix. Must be at least four.}
 }
 \description{
-Creates a second order penalty matrix used in fitting penalized b-splines. 
+Creates a second order penalty matrix used in fitting penalized b-splines.
 Courtesy of CITATION NEEDED. Note that this function produces singular matrices.
 }

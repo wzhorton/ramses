@@ -25,7 +25,7 @@ values are reflected back into the domain. If both bounds are provided, make
 sure the tune is small so that reflections won't also be invalid.}
 }
 \description{
-Function that performs a M-H update for a named parameter given the RAMSES 
-structural elements and loglikelihood/logprior functions. Candidate values 
+Function that performs a M-H update for a named parameter given the RAMSES
+structural elements and loglikelihood/logprior functions. Candidate values
 are drawn from a normal distribution, but it does allow for upper and lower bounds.
 }
