@@ -1,0 +1,117 @@
+---
+title: "Introduction to RAMSES"
+author: "Zach Horton"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to RAMSES}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+*Note this is a draft and has typographical errors, but the code is valid*
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+RAMSES is a suite of tools useful for simplifying the programming of bayesian hierarchical models. This vignette shows a basic example of how a model can be set up using the various helper functions provided with RAMSES.
+
+## Example Model
+Consider this contrived example of a two-way ANOVA with uniform hyper prior. The model can be generically written with $n$ data points and $p$ levels as:
+
+$$
+y \sim N_n(X\beta, \sigma^2I)\\
+\beta \sim N_p(m_\beta, \tau^2I)\\
+\sigma^2 \sim IG(a,b)\\
+b \sim UN(0,c)
+$$
+Our example will use the following model and data
+```{r}
+library(ramses)
+y <- c(1, 1.1 ,1.2 ,1.3, 3, 3.1, 3.2, 3.3)
+X <- matrix(c(rep(1,4),rep(0,8),rep(1,4)),ncol = 2)
+mbeta <- rep(0,2)
+tau2 <- 10
+a <- 2
+c <- 10
+X
+```
+
+$$
+y \sim N_n(X\beta, \sigma^2I)\\
+\beta \sim N_p(\mathbf{0}, 10I)\\
+\sigma^2 \sim IG(2,b)\\
+b \sim UN(0,100)
+$$
+## Model Setup
+
+RAMSES places the focus of model fitting on the definition of update functions. Simply put, you provide RAMSES with a function to update each parameter and RAMSES does the rest of the book keeping and looping. There are even a host of helper functions to make writing update functions easier. 
+--------
+The first object of interest and the easiest to construct is what is called [fixed], although you can name it what ever you like. It is a list that names each object in the model that is not an updating parameter. Note that the name is what gets used in the RAMSES structure, so the object name does not need to match like it does below:
+```{r}
+fixed_list <- list(y = y, X = X, tau2 = tau2, mbeta = mbeta, a = a, c = c)
+```
+
+Next is the parameter state vector. Usually called [parm_state], its a list where each element is named after a parameter that gets updated. Take extra special care to be consistent with your naming. RAMSES indexes by variable name and so it is crucial to get them to match up. The values placed now should be initial values. RAMSES will take care of saving these and future iterations. A reasonable choice in most cases is to set the initial value as the mean of the prior, or something close.
+```{r}
+init_parm_list<- list(beta = mbeta, sig2 = 1, b = 5)
+```
+
+The last object to build before RAMSES can take over is what is internally referred to as [updates], a list of update functions where the list element names (not the function names) match those in the parameter list. This step takes considerably more work, but is much more rewarding. We will use the respective conjugate samplers where they apply and a metropolis hastings step in the last level. Notice that each function must only take [parm_state] and [fixed] as its arguments in that order.
+```{r}
+up_beta <- function(parm_state, fixed){
+  Sig <- parm_state$sig2 * diag(8)
+  update_normal_normal(y = fixed$y, X = fixed$X, 
+                       mu = fixed$mbeta, Sig = Sig, 
+                       V = fixed$tau2 * diag(2))
+}
+
+up_sig2 <- function(parm_state, fixed){
+  update_normal_invgamma(y = fixed$y, a = fixed$a, b = parm_state$b,
+                         mu = fixed$X %*% parm_state$beta, R = diag(8))
+}
+
+up_b <- function(parm_state, fixed){
+  
+  llik <- function(parm_state, fixed){
+    dinvgamma(x = parm_state$sig2, shape = fixed$a, scale = parm_state$b, log = TRUE)
+  }
+  
+  lprior <- function(parm_state, fixed){
+    log(1/10)
+  }
+  
+  update_metropolis("b",llik, lprior, parm_state, fixed, 
+                    tune = 1, lower = 0, upper = fixed$c)
+}
+
+update_list <- list(beta = up_beta, sig2 = up_sig2, b = up_b)
+```
+
+It is important to note in the above code that the metropolis hastings update is quite a lot of effort. Within the update function you must provide a log likelihood function and a log prior function that both only take the fixed and parameter lists as arguments. Also keep in mind that what level you are on in the model will influence your specification of likelihood.
+
+## Model Fit and Results
+
+Now we are ready to let RAMSES fit the model. Expect the output to be a matrix where each row is an MCMC iterate and each column is a parameter or part of a parameter vector.
+```{r}
+mcmc_fit <- sampler(inits = init_parm_list, fixed = fixed_list, updates = update_list,
+        niter = 6000, nburn = 2000)
+```
+
+First lets check the acceptance rate of the metropolis hastings, then lets view the posterior means.
+```{r}
+acc_rate(mcmc_fit[,"b"])
+apply(mcmc_fit,2,mean)
+```
+
+These are looking good. Lets check trace plots.
+```{r}
+plot(mcmc_fit[,1], type = "l")
+plot(mcmc_fit[,2], type = "l")
+plot(mcmc_fit[,3], type = "l")
+plot(mcmc_fit[,4], type = "l")
+```
+
+Thats the basics of the RAMSES system. Although it was useful for instructive purposes, I would advise against setting a uniform prior on b.
