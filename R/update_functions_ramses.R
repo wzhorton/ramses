@@ -62,16 +62,26 @@ update_normal_normal <- function(y, X, mu, Sig, V, Sig_inv, V_inv) {
 #'   If using a constant like 0 use function(z)\{0\}.
 #' @param covfun covariance function that takes a single argument that represents
 #'   an absolute distance. Distances are internally calculated using fields::rdist.
+#' @param random logical; FALSE will return the updated mean function. 
+#'   TRUE will generate a random curve.
 #' @return a vector corresponding to the time variable that represents the updated
 #'   mean vector.
 #' @export
 
-update_gaussian_process <- function(x, y, time, mnfun, covfun) {
+update_gaussian_process <- function(x, y, time, mnfun, covfun, random = FALSE) {
   R12 <- covfun(fields::rdist(time, x))
   R22 <- covfun(fields::rdist(x))
   mu1 <- mnfun(time)
   mu2 <- mnfun(x)
-  return(as.numeric(.update_gp_C(y, R12, R22, mu1, mu2)))
+  up_mean <- .update_gp_mean_C(y, R12, R22, mu1, mu2)
+  if(random == FALSE){
+    out <- up_mean
+  } else {
+    R11 <- covfun(fields::rdist(time))
+    up_var <- .update_gp_var_C(R11, R12, R22)
+    out <- rmnorm(up_mean, cov = up_var)
+  }
+  return(out)
 }
 
 #' Update Step Routine
@@ -104,26 +114,35 @@ update_step <- function(parm_state, fixed, updates, parm_names = names(updates))
 #' @param fixed list of named values that remain fixed in the model.
 #' @param updates list of update functions with names matching those in parm_state.
 #' @param niter,nburn number of MCMC iterates and burnin.
+#' @param parms_to_save character vector indicating which parameters to save.
+#'         Defaults to all. Use this to allow for auxiliary onjects like matrices.
 #' @return A matrix where each row is an MCMC iterate and each column is a
 #'   parameter or part of a parameter vector.
 #' @export
 
-sampler <- function(inits, fixed, updates, niter, nburn) {
-  pnames <- names(unlist(inits))
+sampler <- function(inits, fixed, updates, niter, nburn, 
+                    parms_to_save = names(inits), progress = FALSE) {
+  
+  cat("Progress:  0 %")
+  pnames <- names(unlist(inits[parms_to_save]))
   parameter_state_list <- inits
   nrun <- niter + nburn
   save_matrix <- matrix(NA,
-    ncol = length(unlist(inits)), nrow = nrun,
+    ncol = length(pnames), nrow = nrun,
     dimnames = list(NULL, pnames)
   )
-  save_matrix[1, ] <- unlist(inits)
+  save_matrix[1, ] <- unlist(inits[parms_to_save])
 
   for (i in 2:nrun) {
     out <- update_step(parameter_state_list, fixed, updates)
     parameter_state_list <- out
-    save_matrix[i, ] <- unlist(out)
+    save_matrix[i, ] <- unlist(out[parms_to_save])
     rm(out)
+    if(progress == TRUE){
+      if(((i %% round(nrun*.05)) == 0) && i/nrun >= 0.1) cat("\b\b\b\b\b",round(i/nrun*100),"%")
+    }
   }
+  cat("\nSampling Complete\n")
   return(save_matrix[-c(1:nburn), ])
 }
 
@@ -132,21 +151,21 @@ sampler <- function(inits, fixed, updates, niter, nburn) {
 #' Function that performs a M-H update for a named parameter given the RAMSES
 #' structural elements and loglikelihood/logprior functions. Candidate values
 #' are drawn from a normal distribution, but it does allow for upper and lower bounds.
-#' @param pname character string naming the parameter. The name must match something
-#'  in the parm_state list.
-#' @param loglik_func,logprior_func log likelihood/prior function that takes the
-#'  parm_state and fixed lists as arguments.
+#' @param current_value current value of the parameter.
+#' @param loglik_func,logprior_func log likelihood/prior function that takes
+#'  the current value, parm_state, and fixed. It is possible to let
+#'  the current value be simply extracted from parm_state.
 #' @param parm_state list that names parameters and contains current values.
 #' @param fixed list of named values that remain fixed in the model.
 #' @param tune tuning parameter (standard deviation) in the normal proposal distribution.
-#' @param lower,upper bounds for the parameter to restrict proposed values. Invalid
-#'  values are reflected back into the domain. If both bounds are provided, make
-#'  sure the tune is small so that reflections won't also be invalid.
+#' @param lower,upper bounds for the parameter to restrict proposed values for 
+#'  univariate parameters. Invalid values are reflected back into the domain. 
+#'  If both bounds are provided, make sure the tune is small so that reflections won't 
+#'  also be invalid.
 #' @export
 
-update_metropolis <- function(pname, loglik_func, logprior_func, parm_state, fixed,
+update_metropolis <- function(current_value, loglik_func, logprior_func, parm_state, fixed,
                               tune = .01, lower = NULL, upper = NULL) {
-  current_value <- parm_state[[pname]]
   candidate_value <- rmnorm(current_value, cov = tune * diag(length(current_value)))
 
   if (!is.null(lower) && candidate_value <= lower) {
@@ -161,9 +180,11 @@ update_metropolis <- function(pname, loglik_func, logprior_func, parm_state, fix
     out <- current_value
   }
   else {
-    logbottom <- loglik_func(parm_state, fixed) + logprior_func(parm_state, fixed)
-    parm_state[[pname]] <- candidate_value
-    logtop <- loglik_func(parm_state, fixed) + logprior_func(parm_state, fixed)
+    logbottom <- loglik_func(current_value, parm_state, fixed) + 
+      logprior_func(current_value, parm_state, fixed)
+    
+    logtop <- loglik_func(candidate_value, parm_state, fixed) + 
+      logprior_func(candidate_value, parm_state, fixed)
     if (log(runif(1)) < logtop - logbottom) {
       out <- candidate_value
     } else {

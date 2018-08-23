@@ -4,7 +4,8 @@
 \alias{sampler}
 \title{RAMSES Sampling Structure}
 \usage{
-sampler(inits, fixed, updates, niter, nburn)
+sampler(inits, fixed, updates, niter, nburn,
+  parms_to_save = names(inits), progress = FALSE)
 }
 \arguments{
 \item{inits}{list of named parameter initial values.}
@@ -14,6 +15,9 @@ sampler(inits, fixed, updates, niter, nburn)
 \item{updates}{list of update functions with names matching those in parm_state.}
 
 \item{niter, nburn}{number of MCMC iterates and burnin.}
+
+\item{parms_to_save}{character vector indicating which parameters to save.
+Defaults to all. Use this to allow for auxiliary onjects like matrices.}
 }
 \value{
 A matrix where each row is an MCMC iterate and each column is a

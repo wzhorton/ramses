@@ -4,7 +4,7 @@
 \alias{update_gaussian_process}
 \title{Gaussian Process Update}
 \usage{
-update_gaussian_process(x, y, time, mnfun, covfun)
+update_gaussian_process(x, y, time, mnfun, covfun, random = FALSE)
 }
 \arguments{
 \item{x, y}{coordinate vectors for the observed data points.}
@@ -16,6 +16,9 @@ If using a constant like 0 use function(z)\{0\}.}
 
 \item{covfun}{covariance function that takes a single argument that represents
 an absolute distance. Distances are internally calculated using fields::rdist.}
+
+\item{random}{logical; FALSE will return the updated mean function. 
+TRUE will generate a random curve.}
 }
 \value{
 a vector corresponding to the time variable that represents the updated

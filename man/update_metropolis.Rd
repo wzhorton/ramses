@@ -4,15 +4,15 @@
 \alias{update_metropolis}
 \title{Metropolis-Hastings Symmetric Update}
 \usage{
-update_metropolis(pname, loglik_func, logprior_func, parm_state, fixed,
-  tune = 0.01, lower = NULL, upper = NULL)
+update_metropolis(current_value, loglik_func, logprior_func, parm_state,
+  fixed, tune = 0.01, lower = NULL, upper = NULL)
 }
 \arguments{
-\item{pname}{character string naming the parameter. The name must match something
-in the parm_state list.}
+\item{current_value}{current value of the parameter.}
 
-\item{loglik_func, logprior_func}{log likelihood/prior function that takes the
-parm_state and fixed lists as arguments.}
+\item{loglik_func, logprior_func}{log likelihood/prior function that takes
+the current value, parm_state, and fixed. It is possible to let
+the current value be simply extracted from parm_state.}
 
 \item{parm_state}{list that names parameters and contains current values.}
 
@@ -20,9 +20,10 @@ parm_state and fixed lists as arguments.}
 
 \item{tune}{tuning parameter (standard deviation) in the normal proposal distribution.}
 
-\item{lower, upper}{bounds for the parameter to restrict proposed values. Invalid
-values are reflected back into the domain. If both bounds are provided, make
-sure the tune is small so that reflections won't also be invalid.}
+\item{lower, upper}{bounds for the parameter to restrict proposed values for 
+univariate parameters. Invalid values are reflected back into the domain. 
+If both bounds are provided, make sure the tune is small so that reflections won't 
+also be invalid.}
 }
 \description{
 Function that performs a M-H update for a named parameter given the RAMSES

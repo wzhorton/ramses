@@ -9,7 +9,11 @@ det_sympd_C <- function(x) {
     .Call(`_ramses_dmnorm_C`, y, mu, cov_prec, is_cov)
 }
 
-.update_gp_C <- function(y, R12, R22, mu1, mu2) {
-    .Call(`_ramses_update_gp_C`, y, R12, R22, mu1, mu2)
+.update_gp_mean_C <- function(y, R12, R22, mu1, mu2) {
+    .Call(`_ramses_update_gp_mean_C`, y, R12, R22, mu1, mu2)
+}
+
+.update_gp_var_C <- function(R11, R12, R22) {
+    .Call(`_ramses_update_gp_var_C`, R11, R12, R22)
 }
 

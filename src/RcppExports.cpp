@@ -31,9 +31,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// update_gp_C
-arma::vec update_gp_C(arma::vec y, arma::mat R12, arma::mat R22, arma::vec mu1, arma::vec mu2);
-RcppExport SEXP _ramses_update_gp_C(SEXP ySEXP, SEXP R12SEXP, SEXP R22SEXP, SEXP mu1SEXP, SEXP mu2SEXP) {
+// update_gp_mean_C
+arma::vec update_gp_mean_C(arma::vec y, arma::mat R12, arma::mat R22, arma::vec mu1, arma::vec mu2);
+RcppExport SEXP _ramses_update_gp_mean_C(SEXP ySEXP, SEXP R12SEXP, SEXP R22SEXP, SEXP mu1SEXP, SEXP mu2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,7 +42,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type R22(R22SEXP);
     Rcpp::traits::input_parameter< arma::vec >::type mu1(mu1SEXP);
     Rcpp::traits::input_parameter< arma::vec >::type mu2(mu2SEXP);
-    rcpp_result_gen = Rcpp::wrap(update_gp_C(y, R12, R22, mu1, mu2));
+    rcpp_result_gen = Rcpp::wrap(update_gp_mean_C(y, R12, R22, mu1, mu2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// update_gp_var_C
+arma::mat update_gp_var_C(arma::mat R11, arma::mat R12, arma::mat R22);
+RcppExport SEXP _ramses_update_gp_var_C(SEXP R11SEXP, SEXP R12SEXP, SEXP R22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type R11(R11SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R12(R12SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R22(R22SEXP);
+    rcpp_result_gen = Rcpp::wrap(update_gp_var_C(R11, R12, R22));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,7 +63,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_ramses_det_sympd_C", (DL_FUNC) &_ramses_det_sympd_C, 1},
     {"_ramses_dmnorm_C", (DL_FUNC) &_ramses_dmnorm_C, 4},
-    {"_ramses_update_gp_C", (DL_FUNC) &_ramses_update_gp_C, 5},
+    {"_ramses_update_gp_mean_C", (DL_FUNC) &_ramses_update_gp_mean_C, 5},
+    {"_ramses_update_gp_var_C", (DL_FUNC) &_ramses_update_gp_var_C, 3},
     {NULL, NULL, 0}
 };
 
