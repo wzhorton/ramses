@@ -4,11 +4,15 @@
 \alias{update_metropolis}
 \title{Metropolis-Hastings Symmetric Update}
 \usage{
-update_metropolis(current_value, loglik_func, logprior_func, parm_state,
-  fixed, tune = 0.01, lower = NULL, upper = NULL)
+update_metropolis(current_value, candidate_value, loglik_func,
+  logprior_func, parm_state, fixed, tune = 0.01, lower = NULL,
+  upper = NULL)
 }
 \arguments{
 \item{current_value}{current value of the parameter.}
+
+\item{candidate_value}{optional; specifies the candidate or proposed value. If 
+left out, a random normal vector is generated as the proposal.}
 
 \item{loglik_func, logprior_func}{log likelihood/prior function that takes
 the current value, parm_state, and fixed. It is possible to let

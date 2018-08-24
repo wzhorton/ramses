@@ -139,7 +139,8 @@ sampler <- function(inits, fixed, updates, niter, nburn,
     save_matrix[i, ] <- unlist(out[parms_to_save])
     rm(out)
     if(progress == TRUE){
-      if(((i %% round(nrun*.05)) == 0) && i/nrun >= 0.1) cat("\b\b\b\b\b",round(i/nrun*100),"%")
+      if(((i %% round(nrun*.01)) == 0) && i/nrun < 0.1) cat("\b\b\b\b",round(i/nrun*100),"%")
+      if(((i %% round(nrun*.01)) == 0) && i/nrun >= 0.1) cat("\b\b\b\b\b",round(i/nrun*100),"%")
     }
   }
   cat("\nSampling Complete\n")
@@ -152,6 +153,8 @@ sampler <- function(inits, fixed, updates, niter, nburn,
 #' structural elements and loglikelihood/logprior functions. Candidate values
 #' are drawn from a normal distribution, but it does allow for upper and lower bounds.
 #' @param current_value current value of the parameter.
+#' @param candidate_value optional; specifies the candidate or proposed value. If 
+#'  left out, a random normal vector is generated as the proposal.
 #' @param loglik_func,logprior_func log likelihood/prior function that takes
 #'  the current value, parm_state, and fixed. It is possible to let
 #'  the current value be simply extracted from parm_state.
@@ -164,9 +167,11 @@ sampler <- function(inits, fixed, updates, niter, nburn,
 #'  also be invalid.
 #' @export
 
-update_metropolis <- function(current_value, loglik_func, logprior_func, parm_state, fixed,
+update_metropolis <- function(current_value, candidate_value, loglik_func, logprior_func, parm_state, fixed,
                               tune = .01, lower = NULL, upper = NULL) {
-  candidate_value <- rmnorm(current_value, cov = tune * diag(length(current_value)))
+  if(missing(candidate_value)){
+    candidate_value <- rmnorm(current_value, cov = tune * diag(length(current_value)))
+  }
 
   if (!is.null(lower) && candidate_value <= lower) {
     candidate_value <- abs(candidate_value - lower) + lower
