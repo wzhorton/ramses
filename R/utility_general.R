@@ -32,3 +32,18 @@ K2 <- function(dim) {
   K <- matrix(as.numeric(K), nrow = dim, byrow = TRUE)
   K
 }
+
+#' First Order Penalty Matrix
+#'
+#' Creates a first order penalty matrix used in fitting penalized b-splines.
+#' Courtesy of CITATION NEEDED. Note that this function produces singular matrices.
+#'
+#' @param dim dimension of output matrix. Must be at least four.
+#' @export
+
+K1 <- function(dim){
+  K <- Matrix::bandSparse(dim, k=-c(1), diag=list(rep(-1,dim)), symmetric=TRUE)
+  diag(K) <- c(1,rep(2,dim-2),1)
+  K <- matrix(as.numeric(K),nrow=dim, byrow=TRUE)
+  K
+}
