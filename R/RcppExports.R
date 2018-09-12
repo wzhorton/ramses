@@ -5,6 +5,10 @@ det_sympd_C <- function(x) {
     .Call(`_ramses_det_sympd_C`, x)
 }
 
+logdet_sympd_C <- function(x) {
+    .Call(`_ramses_logdet_sympd_C`, x)
+}
+
 .dmnorm_C <- function(y, mu, cov_prec, is_cov) {
     .Call(`_ramses_dmnorm_C`, y, mu, cov_prec, is_cov)
 }

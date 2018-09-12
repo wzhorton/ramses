@@ -10,6 +10,13 @@ double det_sympd_C (arma::mat x) {
   return y * y;
 }
 
+// [[Rcpp::export]] 
+double logdet_sympd_C (arma::mat x) {
+  arma::mat cholx = chol(x);
+  arma::vec y = log(cholx.diag());
+  return 2 * sum(y);
+}
+
 // [[Rcpp::export(".dmnorm_C")]]
 double dmnorm_C (arma::vec y, arma::vec mu, arma::mat cov_prec, bool is_cov) {
   double n = y.n_elem;
@@ -22,7 +29,7 @@ double dmnorm_C (arma::vec y, arma::vec mu, arma::mat cov_prec, bool is_cov) {
   }
   
   arma::mat log_exp = trans(y - mu) * prec * (y - mu);
-  double out = -n / 2 * log(2 * pi) + .5 * log(det_sympd_C(prec)) - .5 * log_exp(0, 0);
+  double out = -n / 2 * log(2 * pi) + .5 * logdet_sympd_C(prec) - .5 * log_exp(0, 0);
 
   return out;
 }

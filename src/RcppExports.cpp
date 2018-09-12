@@ -17,6 +17,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logdet_sympd_C
+double logdet_sympd_C(arma::mat x);
+RcppExport SEXP _ramses_logdet_sympd_C(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(logdet_sympd_C(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dmnorm_C
 double dmnorm_C(arma::vec y, arma::vec mu, arma::mat cov_prec, bool is_cov);
 RcppExport SEXP _ramses_dmnorm_C(SEXP ySEXP, SEXP muSEXP, SEXP cov_precSEXP, SEXP is_covSEXP) {
@@ -62,6 +73,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ramses_det_sympd_C", (DL_FUNC) &_ramses_det_sympd_C, 1},
+    {"_ramses_logdet_sympd_C", (DL_FUNC) &_ramses_logdet_sympd_C, 1},
     {"_ramses_dmnorm_C", (DL_FUNC) &_ramses_dmnorm_C, 4},
     {"_ramses_update_gp_mean_C", (DL_FUNC) &_ramses_update_gp_mean_C, 5},
     {"_ramses_update_gp_var_C", (DL_FUNC) &_ramses_update_gp_var_C, 3},
