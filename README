@@ -1,0 +1,3 @@
+RAMSES stands for R's Auxiliary Mcmc System for Easy Sampling. It is an R package designed to expidite the coding process of bayesian hierarchical models. This system is comparable in purpose to JAGS or NIMBLE except it takes full advantage of R's flexibility, allowing for custom sampling functions to be used with ease.
+
+Edit (Sep 17 2018): Using RcppArmadillo may have been a mistake. Individual calculations are sped up, but the nature of MCMC loops introduces an inefficiency by repeatedly transfering large objects back and forth between the R and C++ environments (this might not be technically correct). As such, I have decided to drop support for this package. Instead, see my other repo named "" which is similar in nature, but does not depend on any C++ code.
